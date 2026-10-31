@@ -1,0 +1,1066 @@
+/*
+ * stillfloating 刷题站 · 视觉统一层
+ * --------------------------------------------------------------
+ * 站点源码不在服务器上（只有构建产物），这里用一张后置样式表统一修正：
+ *   1. 卡片不再半透明压在壁纸上（可读性优先），统一圆角 / 描边 / 阴影；
+ *   2. 页面头部、标题、正文的字号与留白重新分层；
+ *   3. 按钮、输入框、标签、表格、空状态、弹窗统一到一套规格；
+ *   4. 浅色 / 夜间共用同一套结构，只换颜色变量。
+ * 加载顺序必须在应用自带样式之后，见 index.html 里的 <link>。
+ */
+
+/* ---------- 基础排版 ---------- */
+body {
+  font-size: 14.5px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--primary) 22%, transparent);
+}
+
+/* 滚动条：细一点，别抢视线 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--border-strong) 70%, transparent) transparent;
+}
+
+/* ---------- 骨架：侧栏 / 顶栏 / 内容区 ---------- */
+.app-sidebar {
+  background: var(--surface) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border-right: 1px solid var(--border) !important;
+  box-shadow: 1px 0 0 color-mix(in srgb, var(--border) 45%, transparent);
+}
+
+.sidebar-brand {
+  padding: 14px 12px 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
+  margin-bottom: 6px;
+}
+
+.sidebar-head {
+  padding: 6px 10px 4px;
+}
+
+.sidebar-collapse {
+  border-radius: 8px;
+}
+
+.sidebar-link,
+.sidebar-theme {
+  border-radius: 9px !important;
+  margin: 1px 6px;
+  padding: 8px 10px !important;
+  transition: background-color .16s ease, color .16s ease;
+}
+
+.sidebar-link.is-active,
+.sidebar-theme.is-active {
+  background: color-mix(in srgb, var(--primary) 10%, transparent) !important;
+  color: var(--primary-strong) !important;
+  box-shadow: inset 2px 0 0 var(--primary);
+  font-weight: 600;
+}
+
+.app-topbar {
+  background: var(--surface) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--border) 50%, transparent);
+}
+
+.topbar-nav > a,
+.topbar-nav > button {
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 13.5px;
+  color: var(--muted);
+  transition: color .15s ease, background-color .15s ease;
+}
+
+.topbar-nav > a:hover,
+.topbar-nav > button:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+}
+
+.topbar-nav > a[aria-current="page"],
+.topbar-nav > button[aria-expanded="true"] {
+  color: var(--primary-strong);
+  font-weight: 600;
+}
+
+/* ---------- 页面骨架 ---------- */
+.page {
+  width: min(880px, 100%);
+  margin: 0 auto;
+  padding: 30px 24px 110px;
+}
+
+.page-state {
+  width: min(880px, 100%);
+  padding: 56px 24px;
+}
+
+/* 页面头部：返回 + 面包屑 + 标题 */
+.content-page-back {
+  min-height: 34px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12.5px;
+  box-shadow: var(--shadow-soft);
+  transition: color .15s ease, border-color .15s ease, transform .15s ease;
+}
+
+.content-page-back:hover {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+  transform: translateX(-1px);
+}
+
+.content-page-breadcrumb {
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--muted) 82%, transparent);
+}
+
+.content-page-title {
+  font-family: var(--font-display);
+  font-size: 23px !important;
+  font-weight: 600 !important;
+  letter-spacing: .01em;
+  line-height: 1.25;
+  margin-top: 3px !important;
+}
+
+.page-heading {
+  margin-bottom: 22px;
+}
+
+.section-head h2,
+.section-head h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+
+/* ---------- 卡片：全部改成实底 ---------- */
+.card,
+.panel,
+.guide-card,
+.import-card,
+.account-panel,
+.feedback-empty,
+.leaderboard-login-card,
+.leaderboard-table-wrap,
+.leaderboard-rules,
+.leaderboard-empty,
+.friends-login-card,
+.friends-profile,
+.friends-search,
+.friends-section,
+.home-section-card,
+.home-bank-card,
+.bank-card,
+.stat,
+.question-card,
+.review-section,
+.review-preview,
+.review-practice,
+.daily-item,
+.daily-section {
+  background: var(--surface) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border: 1px solid color-mix(in srgb, var(--border) 88%, transparent) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--text) 5%, transparent),
+              0 14px 32px color-mix(in srgb, var(--text) 7%, transparent) !important;
+}
+
+/* 首页大面板压在整页插画上，保留一点通透感但不影响读字 */
+.home-panel {
+  background: color-mix(in srgb, var(--surface) 94%, transparent) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(118%) !important;
+  backdrop-filter: blur(18px) saturate(118%) !important;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--text) 16%, transparent) !important;
+}
+
+.guide-card {
+  padding: 40px 44px !important;
+}
+
+.guide-card section {
+  margin-top: 30px;
+}
+
+.guide-card section > h2 {
+  font-family: var(--font-display);
+  font-size: 20px !important;
+  font-weight: 600;
+  letter-spacing: .01em;
+  margin: 0 0 10px !important;
+  padding-left: 12px;
+  border-left: 3px solid color-mix(in srgb, var(--primary) 55%, transparent);
+}
+
+.guide-card p {
+  color: color-mix(in srgb, var(--text) 88%, transparent);
+  font-size: 14.5px;
+  line-height: 1.9;
+  margin: 0 0 8px;
+}
+
+.guide-header {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 22px;
+  margin-bottom: 6px;
+}
+
+.guide-header h1 {
+  font-family: var(--font-display);
+  font-size: 30px !important;
+  font-weight: 600;
+  letter-spacing: .01em;
+  margin: 4px 0 10px !important;
+}
+
+.guide-last {
+  border-top: 1px dashed color-mix(in srgb, var(--border) 90%, transparent);
+  padding-top: 22px;
+  color: color-mix(in srgb, var(--text) 78%, transparent);
+}
+
+/* ---------- 正文与弱化文字 ---------- */
+p,
+li,
+dd,
+dt {
+  line-height: 1.8;
+}
+
+.muted,
+.small,
+.page-state,
+.route-loading {
+  color: color-mix(in srgb, var(--muted) 92%, transparent);
+}
+
+.leaderboard-rules p,
+.leaderboard-rules li,
+.guide-card p {
+  color: color-mix(in srgb, var(--text) 86%, transparent);
+}
+
+/* ---------- 按钮 ---------- */
+.button,
+.btn {
+  min-height: 38px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease,
+              box-shadow .15s ease, transform .15s ease;
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.button-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--primary) 35%, transparent),
+              0 8px 18px color-mix(in srgb, var(--primary) 22%, transparent);
+}
+
+.button-primary:hover {
+  background: var(--primary-strong);
+  border-color: var(--primary-strong);
+}
+
+.button-secondary {
+  background: var(--surface);
+  border-color: color-mix(in srgb, var(--border-strong) 70%, var(--border));
+  color: var(--text);
+}
+
+.button-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary-strong);
+  background: color-mix(in srgb, var(--primary) 6%, var(--surface));
+}
+
+.button-ghost {
+  color: var(--muted);
+  border-color: transparent;
+}
+
+.button-ghost:hover {
+  background: color-mix(in srgb, var(--surface-2) 75%, transparent);
+  color: var(--text);
+}
+
+.button-danger {
+  background: color-mix(in srgb, var(--bad) 12%, var(--surface));
+  border-color: color-mix(in srgb, var(--bad) 45%, var(--border));
+  color: var(--bad);
+}
+
+.icon-button {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+}
+
+/* ---------- 输入框 / 搜索 ---------- */
+.input,
+.search-input,
+.content-search-input,
+select.input,
+textarea.input {
+  min-height: 40px;
+  padding: 9px 13px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--border-strong) 55%, var(--border));
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.input:focus,
+.search-input:focus,
+.content-search-input:focus,
+textarea.input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 16%, transparent);
+}
+
+.field-label,
+label {
+  font-size: 13px;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--text) 82%, transparent);
+}
+
+/* ---------- 标签 / 徽章 / 分段控件 ---------- */
+.chip {
+  min-height: 34px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--border-strong) 50%, var(--border));
+  color: var(--muted);
+  font-size: 13px;
+  transition: all .15s ease;
+}
+
+.chip:hover {
+  color: var(--text);
+  border-color: var(--primary);
+}
+
+.chip.is-active,
+.chip[aria-selected="true"],
+.chip[aria-pressed="true"] {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--on-primary);
+  font-weight: 600;
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--primary) 24%, transparent);
+}
+
+.badge,
+.tag {
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .01em;
+}
+
+/* ---------- 空状态 ---------- */
+.leaderboard-empty,
+.bank-empty,
+.daily-wrong-empty,
+.chat-empty,
+.learning-summary-empty,
+.feedback-empty.is-empty {
+  border: 1px dashed color-mix(in srgb, var(--border-strong) 70%, transparent) !important;
+  border-radius: 14px !important;
+  background: color-mix(in srgb, var(--surface-2) 45%, var(--surface)) !important;
+  box-shadow: none !important;
+  padding: 44px 24px !important;
+  text-align: center;
+  color: color-mix(in srgb, var(--muted) 95%, transparent);
+}
+
+.leaderboard-empty p,
+.bank-empty p {
+  margin: 6px 0;
+}
+
+/* ---------- 表格 / 列表 ---------- */
+.leaderboard-table {
+  font-size: 14px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.leaderboard-table th {
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--muted) 88%, transparent);
+  font-weight: 600;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.leaderboard-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+}
+
+.leaderboard-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.leaderboard-table tbody tr:hover {
+  background: color-mix(in srgb, var(--primary) 5%, transparent);
+}
+
+.feedback-list > li,
+.review-list > li,
+.mastery-list > li,
+.friends-list > li {
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.feedback-list > li:hover,
+.friends-list > li:hover {
+  border-color: color-mix(in srgb, var(--primary) 40%, var(--border));
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+/* ---------- 弹窗 ---------- */
+.dialog-overlay,
+.quiz-dialog-overlay {
+  background: color-mix(in srgb, #12100e 52%, transparent) !important;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+.dialog-content,
+.quiz-dialog-content,
+.auth-dialog-content,
+.feedback-dialog-content,
+.companion-chat-dialog,
+.migration-dialog-content {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 30px 70px color-mix(in srgb, #000 30%, transparent) !important;
+  padding: 26px 28px !important;
+}
+
+.dialog-content h2,
+.quiz-dialog-title,
+.auth-dialog-head h2 {
+  font-family: var(--font-display);
+  font-size: 21px !important;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+
+.dialog-close,
+.quiz-dialog-close,
+.auth-dialog-close {
+  border-radius: 9px;
+}
+
+.dialog-actions,
+.quiz-dialog-actions,
+.dialog-foot {
+  gap: 10px;
+  margin-top: 22px;
+}
+
+/* ---------- 首页 ---------- */
+.home-time {
+  font-size: 84px;
+  letter-spacing: -.01em;
+}
+
+.home-date {
+  font-size: 15px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--text) 62%, transparent);
+}
+
+.home-greeting {
+  font-size: 15.5px;
+  line-height: 1.9;
+}
+
+.home-scroll-hint {
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: color-mix(in srgb, var(--text) 55%, transparent);
+}
+
+.hero-action-primary,
+.hero-action-secondary {
+  border-radius: 999px;
+  min-height: 40px;
+  padding: 8px 18px;
+}
+
+.hero-action-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary) 26%, transparent);
+}
+
+/* 首页下方分区卡片：统一边距与标题 */
+.home-sections {
+  gap: 18px;
+}
+
+.home-section-card {
+  padding: 24px !important;
+}
+
+.home-section-card > h3,
+.home-section-head h3 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+
+/* ---------- 夜间模式微调 ---------- */
+[data-theme="dark"] {
+  --surface: #212225;
+  --surface-2: #2a2b2f;
+  --border: #34363a;
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .guide-card,
+[data-theme="dark"] .leaderboard-rules,
+[data-theme="dark"] .leaderboard-table-wrap,
+[data-theme="dark"] .friends-section,
+[data-theme="dark"] .account-panel,
+[data-theme="dark"] .home-section-card,
+[data-theme="dark"] .import-card {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 16px 34px rgba(0, 0, 0, .28) !important;
+  border-color: #36383c !important;
+}
+
+[data-theme="dark"] .home-panel {
+  background: color-mix(in srgb, #212225 92%, transparent) !important;
+}
+
+/* ---------- 窄屏 ---------- */
+@media (max-width: 767px) {
+  .page {
+    padding: 18px 14px 96px;
+  }
+
+  .content-page-title {
+    font-size: 19px !important;
+  }
+
+  .guide-card {
+    padding: 24px 18px !important;
+  }
+
+  .guide-card section {
+    margin-top: 24px;
+  }
+
+  .guide-card section > h2 {
+    font-size: 18px !important;
+  }
+
+  .dialog-content,
+  .quiz-dialog-content,
+  .auth-dialog-content,
+  .feedback-dialog-content,
+  .companion-chat-dialog {
+    padding: 20px 18px !important;
+    border-radius: 16px !important;
+  }
+}
+
+/* ---------- 内容页壁纸：压成底纹，别和正文抢 ---------- */
+.guide-wallpaper,
+.import-wallpaper,
+.feedback-wallpaper,
+.content-wallpaper {
+  opacity: .42;
+  filter: saturate(.9);
+}
+
+[data-theme="dark"] .guide-wallpaper,
+[data-theme="dark"] .import-wallpaper,
+[data-theme="dark"] .feedback-wallpaper,
+[data-theme="dark"] .content-wallpaper {
+  opacity: .3;
+}
+
+/* ---------- 页面标题区 ---------- */
+.page-heading {
+  margin: 2px 0 22px;
+}
+
+.page-heading h1,
+.page-heading h2,
+.page-mobile-title {
+  font-family: var(--font-display);
+  font-size: 27px !important;
+  font-weight: 600 !important;
+  letter-spacing: .01em;
+  line-height: 1.25;
+  color: var(--text);
+  margin: 0 0 8px !important;
+}
+
+.page-heading p {
+  max-width: 62ch;
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: color-mix(in srgb, var(--text) 74%, transparent);
+}
+
+/* ---------- 分段控件（排行榜等） ---------- */
+.leaderboard-scopes,
+.leaderboard-periods {
+  background: color-mix(in srgb, var(--surface-2) 70%, var(--surface)) !important;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  border-radius: 999px !important;
+  padding: 3px !important;
+  gap: 2px !important;
+}
+
+.leaderboard-scopes button,
+.leaderboard-periods button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 7px 15px;
+  border-radius: 999px;
+  transition: background-color .15s ease, color .15s ease, box-shadow .15s ease;
+}
+
+.leaderboard-scopes button:hover,
+.leaderboard-periods button:hover {
+  color: var(--text);
+}
+
+.leaderboard-scopes button.is-active,
+.leaderboard-periods button.is-active {
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 600;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 28%, transparent);
+}
+
+.leaderboard-range {
+  font-size: 12px !important;
+  letter-spacing: .02em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+  display: inline-block;
+}
+
+/* ---------- 使用说明：控制行宽 ---------- */
+.page.guide-page {
+  width: min(780px, 100%);
+}
+
+.guide-card p {
+  max-width: 68ch;
+}
+
+/* ---------- 卡片内标题统一 ---------- */
+.import-card h2,
+.leaderboard-rules h2,
+.friends-section h2,
+.account-panel h2,
+.feedback-page h2,
+.review-section h2 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  margin: 0 0 10px;
+}
+
+.leaderboard-rules h2 {
+  font-size: 18px;
+  padding-left: 12px;
+  border-left: 3px solid color-mix(in srgb, var(--primary) 55%, transparent);
+  margin-bottom: 14px;
+}
+
+/* 说明类列表：去掉默认圆点，改用细线 */
+.leaderboard-rules ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.leaderboard-rules li {
+  position: relative;
+  padding-left: 16px;
+  margin: 7px 0;
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: color-mix(in srgb, var(--text) 82%, transparent);
+}
+
+.leaderboard-rules li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: .72em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--primary) 60%, transparent);
+}
+
+/* ---------- 移动端修正 ---------- */
+@media (max-width: 767px) {
+  /* 顶栏已经有面包屑，页面里另有标题；不要在手机上重复两次标题 */
+  .content-page-title {
+    display: none;
+  }
+
+  .content-page-heading {
+    gap: 2px;
+  }
+
+  .page-mobile-title {
+    font-size: 24px !important;
+  }
+
+  .page-heading h1 {
+    font-size: 24px !important;
+  }
+
+  .leaderboard-range {
+    border-radius: 10px;
+    display: block;
+    line-height: 1.6;
+  }
+
+  .leaderboard-scopes,
+  .leaderboard-periods {
+    width: 100%;
+  }
+
+  .leaderboard-scopes button,
+  .leaderboard-periods button {
+    flex: 1;
+    padding: 8px 10px;
+  }
+
+  .page-heading p {
+    font-size: 13px;
+  }
+}
+
+/* ---------- 没有壁纸的内容页（代码题库 / 账户）：补一层很淡的光晕，别太空 ---------- */
+.app-main.ui-content-page:not(:has([class*="wallpaper"])) {
+  background-image:
+    radial-gradient(1100px 520px at 12% -6%, color-mix(in srgb, var(--primary) 7%, transparent), transparent 68%),
+    radial-gradient(900px 480px at 102% 104%, color-mix(in srgb, var(--gold) 10%, transparent), transparent 70%);
+  background-repeat: no-repeat;
+}
+
+/* ---------- 浮层：下拉、搜索、题库选择 ---------- */
+.app-search-panel,
+.home-select-panel {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 18px 44px color-mix(in srgb, var(--text) 16%, transparent) !important;
+  padding: 8px !important;
+}
+
+.home-select-panel button,
+.app-search-panel button,
+.content-search-list button {
+  border-radius: 9px;
+  padding: 8px 10px;
+  transition: background-color .15s ease;
+}
+
+.home-select-panel button:hover,
+.app-search-panel button:hover,
+.content-search-list button:hover {
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+}
+
+/* 顶栏下拉里的说明文字 */
+.home-select-panel small,
+.home-select-panel .muted {
+  color: color-mix(in srgb, var(--muted) 92%, transparent);
+  font-size: 12px;
+}
+
+/* ==========================================================
+ * 密度收紧（第二轮）：同样的信息，更轻的视觉重量
+ * ========================================================== */
+
+/* 侧栏：行高 41 → 34，图标与文字都收一点 */
+.sidebar-link,
+.sidebar-theme {
+  min-height: 34px !important;
+  padding: 6px 10px !important;
+  font-size: 13.5px !important;
+  gap: 9px !important;
+  margin: 0 6px;
+}
+
+.sidebar-nav {
+  gap: 2px !important;
+  padding: 4px 0 !important;
+}
+
+.sidebar-brand {
+  padding: 12px 10px 10px !important;
+  margin-bottom: 2px !important;
+}
+
+.sidebar-head {
+  padding: 2px 10px 2px !important;
+}
+
+.sidebar-tools-title {
+  font-size: 10.5px;
+  letter-spacing: .08em;
+}
+
+.sidebar-foot {
+  gap: 2px !important;
+  padding: 6px 0 10px !important;
+}
+
+/* 页面：上下留白收窄，标题降一档 */
+.page {
+  padding: 24px 22px 88px;
+}
+
+.content-page-title {
+  font-size: 21px !important;
+}
+
+.content-page-breadcrumb {
+  font-size: 11px;
+}
+
+.page-heading {
+  margin: 0 0 18px;
+}
+
+.page-heading h1,
+.page-mobile-title {
+  font-size: 24px !important;
+  margin-bottom: 6px !important;
+}
+
+.page-heading p {
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+/* 卡片：阴影变淡、圆角小一档，避免“浮起来”的厚重感 */
+.card,
+.panel,
+.guide-card,
+.import-card,
+.account-panel,
+.feedback-empty,
+.leaderboard-login-card,
+.leaderboard-table-wrap,
+.leaderboard-rules,
+.leaderboard-empty,
+.friends-login-card,
+.friends-profile,
+.friends-search,
+.friends-section,
+.home-section-card,
+.home-bank-card,
+.bank-card,
+.stat,
+.question-card,
+.review-section,
+.review-preview,
+.review-practice,
+.daily-item,
+.daily-section {
+  border-radius: 13px !important;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--text) 4%, transparent),
+              0 8px 22px color-mix(in srgb, var(--text) 5%, transparent) !important;
+}
+
+.home-panel {
+  border-radius: 18px !important;
+  box-shadow: 0 18px 44px color-mix(in srgb, var(--text) 12%, transparent) !important;
+}
+
+/* 使用说明：卡片内边距与段落间距收紧 */
+.guide-card {
+  padding: 32px 36px !important;
+}
+
+.guide-card section {
+  margin-top: 24px;
+}
+
+.guide-card section > h2 {
+  font-size: 18px !important;
+  padding-left: 10px;
+  margin-bottom: 8px !important;
+}
+
+.guide-card p {
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.guide-header {
+  padding-bottom: 18px;
+}
+
+/* 首页分区与空状态 */
+.home-section-card {
+  padding: 20px !important;
+}
+
+.leaderboard-empty,
+.bank-empty,
+.daily-wrong-empty,
+.chat-empty,
+.learning-summary-empty,
+.feedback-empty.is-empty {
+  padding: 32px 20px !important;
+}
+
+.leaderboard-rules {
+  padding: 20px 22px;
+}
+
+/* 弹窗稍微收一点 */
+.dialog-content,
+.quiz-dialog-content,
+.auth-dialog-content,
+.feedback-dialog-content,
+.companion-chat-dialog,
+.migration-dialog-content {
+  padding: 22px 24px !important;
+  border-radius: 16px !important;
+}
+
+/* 手机端同样收紧 */
+@media (max-width: 767px) {
+  .page {
+    padding: 16px 14px 84px;
+  }
+
+  .guide-card {
+    padding: 22px 16px !important;
+  }
+
+  .page-mobile-title,
+  .page-heading h1 {
+    font-size: 21px !important;
+  }
+
+  .sidebar-link,
+  .sidebar-theme {
+    min-height: 40px !important;
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* ==========================================================
+ * 精简：去掉陪伴角色 + 首页板块折叠
+ * ========================================================== */
+
+/* 陪伴角色（高松灯）：入口、浮钮、面板一律隐藏 */
+.companion-entry-wrap,
+.companion-entry,
+.companion-panel,
+.companion-status,
+.companion-tools,
+.companion-outfits,
+.companion-chat-dialog,
+#app-sidebar button[data-label$="陪伴"],
+#app-sidebar a[data-label$="陪伴"] {
+  display: none !important;
+}
+
+/* 首页：默认只展示前两个板块，其余折叠 */
+.ui-home-collapsed > .home-anchor:nth-of-type(n + 3) {
+  /* 不能用 display:none：应用的高亮逻辑按 getBoundingClientRect().top 判断，
+     隐藏元素 rect 全为 0 会被误判成“在顶部”，滚动时高亮会跳到最后一个板块。 */
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.ui-home-expand {
+  display: block;
+  width: 100%;
+  margin: 4px 0 2px;
+  padding: 13px 16px;
+  border: 1px dashed color-mix(in srgb, var(--border-strong) 65%, transparent);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: .04em;
+  cursor: pointer;
+  transition: color .15s ease, border-color .15s ease, background-color .15s ease;
+}
+
+.ui-home-expand:hover {
+  color: var(--text);
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
