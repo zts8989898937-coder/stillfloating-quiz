@@ -3,3 +3,19 @@ Thumbs.db
 *.log
 __pycache__/
 *.pyc
+
+# Local credentials, runtime data and generated files
+.env
+.env.*
+!.env.example
+*.bak
+*.bak-*
+*.log
+__pycache__/
+*.py[cod]
+node_modules/
+*.sqlite
+*.sqlite3
+*.db
+pastes/
+uploads/

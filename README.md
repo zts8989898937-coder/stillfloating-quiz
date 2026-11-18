@@ -56,3 +56,7 @@ screenshots/
 ## 许可
 
 代码以 [MIT](LICENSE) 许可开源。站点本体、题库与第三方资源遵循各自许可。
+
+## 公开版本说明
+
+部署参数使用示例值。公开范围见 [PUBLIC_SCOPE.md](PUBLIC_SCOPE.md)，通用框架和路线见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) 与 [docs/ROADMAP.md](docs/ROADMAP.md)。
