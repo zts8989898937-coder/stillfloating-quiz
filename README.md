@@ -25,7 +25,7 @@ ui-polish.css          # 视觉统一层：卡片可读性、圆角、间距、�
 ui-polish.js           # 渲染后微调：精简「使用说明」、修正侧栏跳转等
 scripts/
 ├── patch-icons.py     # 给侧栏每个功能补上不同图标（直接改构建产物）
-├── patch-copy.py      # 用博客歌词接口替换首页轮换文案与教练式文案
+├── patch-copy.py      # 用预先选好的歌词替换首页轮换语和运势签语
 ├── deploy.sh          # 图标/文案补丁的部署脚本（备份 → 拉取 → 打补丁 → 上传 → 校验）
 └── deploy-ui.sh       # 视觉层部署脚本
 screenshots/
@@ -33,30 +33,25 @@ screenshots/
 
 ![刷题站 · 首页歌词](screenshots/quiz-home-lyrics.webp)
 
-## 怎么用
+## 本地试用与部署
 
-这些脚本针对线上服务器的构建产物工作，默认通过 `ssh hk` 连接、路径为 `/srv/quiz-site/current/dist/web`：
+`patch-icons.py` 和 `patch-copy.py` 都接受输入、输出两个文件路径。可以先在站点 bundle 的副本上运行补丁，再检查差异：
 
 ```bash
-# 视觉层（CSS/JS/主题启动脚本）
-./scripts/deploy-ui.sh
-
-# 图标 + 文案补丁
-./scripts/deploy.sh
+python3 scripts/patch-icons.py input.js icons.js
+python3 scripts/patch-copy.py icons.js patched.js
 ```
 
-脚本会先备份原文件到 `/root/site-backup/`，再上传并做 HTTP 校验。
+这两个补丁识别特定的代码片段，适用的输入取决于构建版本。站点更新后先核对 bundle 名称和补丁锚点。`patch-copy.py` 直接使用脚本中预先选好的歌词，运行时无需请求博客接口。
 
-## 注意
-
-- 补丁脚本绑定了具体的 bundle 文件名（如 `index-D2YsLB2t.js`）。站点升级后哈希会变，需要更新脚本里的 `ASSET_MAIN` / `ASSET_CHUNK`。
-- `patch-copy.py` 会请求博客的歌词接口（`https://stillfloating.top/wp-json/stillfloating/v1/lyrics`），博客侧不可用时跳过替换。
-- 脚本含服务器路径，只适合作者本人环境使用；公开仅为存档参考。
+`scripts/deploy-ui.sh` 部署样式和交互层，`scripts/deploy.sh` 部署图标和文案补丁。两者会通过 SSH 修改目标站点文件。使用前请核对目标主机、远端路径、文件属主、站点响应校验和资源版本号，先在测试环境验证。
 
 ## 许可
 
-代码以 [MIT](LICENSE) 许可开源。站点本体、题库与第三方资源遵循各自许可。
+仓库代码以 [MIT](LICENSE) 许可开源。站点本体、题库与第三方资源遵循各自许可。
 
-## 公开版本说明
+## 2026-11-18 公开版更新
 
-部署参数使用示例值。公开范围见 [PUBLIC_SCOPE.md](PUBLIC_SCOPE.md)，通用框架和路线见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) 与 [docs/ROADMAP.md](docs/ROADMAP.md)。
+保留主题、样式、交互脚本和构建产物补丁，补充公开范围与维护路线。使用脚本前需要准备匹配的站点构建产物。 [查看更新提交](https://github.com/zts8989898937-coder/stillfloating-quiz/commit/19b2aa511bb0b491f0b8db1add66ec0cb0c124f2)
+
+[公开范围](PUBLIC_SCOPE.md) · [架构说明](docs/ARCHITECTURE.md) · [后续路线](docs/ROADMAP.md)
